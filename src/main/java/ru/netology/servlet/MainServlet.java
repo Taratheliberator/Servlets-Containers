@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 public class MainServlet extends HttpServlet {
   private PostController controller;
   private PostRepository repository;
+  private final String PATH_POSTS = "/api/posts";
+  private final String PATH_WITH_NUMBER_POST = PATH_POSTS + "/\\d+";
 
   @Override
   public void init() {
@@ -27,11 +29,11 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals("GET") && path.equals(PATH_POSTS)) {
         controller.all(resp);
         return;
       }
-      if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
+      if (method.equals("GET") && path.matches(PATH_WITH_NUMBER_POST)) {
         // easy way
         final var id = findId(path);
 
@@ -39,11 +41,11 @@ public class MainServlet extends HttpServlet {
 
         return;
       }
-      if (method.equals("POST") && path.equals("/api/posts")) {
+      if (method.equals("POST") && path.equals(PATH_POSTS)) {
         controller.save(req.getReader(), resp);
         return;
       }
-      if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
+      if (method.equals("DELETE") && path.matches(PATH_WITH_NUMBER_POST)) {
         // easy way
         final var id = findId(path);
 
